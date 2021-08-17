@@ -9,38 +9,42 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.amb.fakestackoverflow.R
+import com.amb.fakestackoverflow.model.Question
 import com.amb.fakestackoverflow.viewmodel.QuestionsViewModel
 
 class MainActivity : AppCompatActivity() {
 
+    private val viewModel: QuestionsViewModel by viewModels()
+
     private val questionsList by lazy { findViewById<RecyclerView>(R.id.questions_list) }
     private val listErrorText by lazy { findViewById<TextView>(R.id.list_error) }
     private val loadingView by lazy { findViewById<ProgressBar>(R.id.loading_view) }
+    private val swipeRefreshLayout by lazy { findViewById<SwipeRefreshLayout>(R.id.swipe_layout) }
 
-    private val questionsAdapter = QuestionsAdapter(arrayListOf())
-    private val lm = LinearLayoutManager(this)
-    private val viewModel: QuestionsViewModel by viewModels()
+    private lateinit var questionsAdapter: QuestionsAdapter
+    private lateinit var lm: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        questionsList.apply {
-            layoutManager = lm
-            adapter = questionsAdapter
-        }
-
         observeViewModel()
-
-        viewModel.getQuestions()
+        initViews()
+        viewModel.getNextPage()
     }
 
+    private fun initViews() {
+        setupQuestionList()
+        setupRefreshLayout()
+    }
 
     private fun observeViewModel() {
         viewModel.questionsResponse.observe(this, Observer { items ->
             items?.let {
                 questionsList.visibility = View.VISIBLE
+                swipeRefreshLayout.isRefreshing = false
                 questionsAdapter.addQuestions(it)
             }
         })
@@ -59,5 +63,44 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun setupRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener {
+            questionsAdapter.clearQuestions()
+            viewModel.getFirstPage()
+            loadingView.visibility = View.VISIBLE
+            questionsList.visibility = View.GONE
+        }
+    }
+
+    private fun setupQuestionList() {
+        val questionClickListener = object : OnQuestionClick {
+            override fun onClick(question: Question) {
+
+            }
+        }
+
+        questionsAdapter = QuestionsAdapter(arrayListOf(), questionClickListener)
+        lm = LinearLayoutManager(this)
+
+        questionsList.apply {
+            layoutManager = lm
+            adapter = questionsAdapter
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (dy > 0) {
+                        val childCount = questionsAdapter.itemCount
+                        val lastPosition = lm.findLastVisibleItemPosition()
+                        if (childCount - 1 == lastPosition && loadingView.visibility == View.GONE) {
+                            loadingView.visibility = View.VISIBLE
+                            viewModel.getNextPage()
+                        }
+                    }
+                }
+            })
+        }
     }
 }
