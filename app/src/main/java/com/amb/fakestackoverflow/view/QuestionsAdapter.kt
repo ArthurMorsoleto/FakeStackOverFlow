@@ -1,5 +1,6 @@
 package com.amb.fakestackoverflow.view
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,8 @@ import kotlinx.android.synthetic.main.question_layout.view.*
 
 class QuestionsAdapter(
     private val questions: ArrayList<Question>,
-    private val listener: OnQuestionClick
+    private val listener: OnQuestionClick,
+    private val context: Context
 ) : RecyclerView.Adapter<QuestionsAdapter.AdapterViewHolder>() {
 
     fun addQuestions(newQuestions: List<Question>) {
@@ -35,7 +37,7 @@ class QuestionsAdapter(
     override fun getItemCount() = questions.size
 
     override fun onBindViewHolder(holder: AdapterViewHolder, position: Int) {
-        holder.bind(questions[position], listener)
+        holder.bind(questions[position], listener, context)
     }
 
     class AdapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -46,10 +48,11 @@ class QuestionsAdapter(
 
         fun bind(
             question: Question,
-            listener: OnQuestionClick
+            listener: OnQuestionClick,
+            context: Context
         ) {
             title.text = convertTitle(question.questionTitle)
-            score.text = question.score
+            score.text = context.resources.getString(R.string.text_question_score, question.score)
             date.text = convertDate(question.creationDate)
 
             questionView.setOnClickListener {

@@ -1,5 +1,6 @@
 package com.amb.fakestackoverflow.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.amb.fakestackoverflow.QUESTION_EXTRA
 import com.amb.fakestackoverflow.R
 import com.amb.fakestackoverflow.model.Question
 import com.amb.fakestackoverflow.viewmodel.QuestionsViewModel
@@ -77,11 +79,11 @@ class MainActivity : AppCompatActivity() {
     private fun setupQuestionList() {
         val questionClickListener = object : OnQuestionClick {
             override fun onClick(question: Question) {
-
+                loadQuestionDetailScreen(question)
             }
         }
 
-        questionsAdapter = QuestionsAdapter(arrayListOf(), questionClickListener)
+        questionsAdapter = QuestionsAdapter(arrayListOf(), questionClickListener, this@MainActivity)
         lm = LinearLayoutManager(this)
 
         questionsList.apply {
@@ -102,5 +104,14 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    private fun loadQuestionDetailScreen(question: Question) {
+        startActivity(Intent(
+            this@MainActivity,
+            QuestionDetailsActivity::class.java
+        ).apply {
+            putExtra(QUESTION_EXTRA, question)
+        })
     }
 }

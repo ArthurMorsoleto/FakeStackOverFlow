@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Fake StackOverFlow</string>
+    <string name="text_question_score">Score: %s</string>
 </resources>

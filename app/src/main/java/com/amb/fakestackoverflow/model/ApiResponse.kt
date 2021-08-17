@@ -1,15 +1,18 @@
 package com.amb.fakestackoverflow.model
 
 import android.os.Build
+import android.os.Parcelable
 import android.text.Html
 import android.text.format.DateFormat
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 data class ResponseWrapper<T>(
     val items: List<T>
 )
 
+@Parcelize
 data class Question(
     @SerializedName("question_id")
     val questionId: Int?,
@@ -22,7 +25,7 @@ data class Question(
 
     @SerializedName("creation_date")
     val creationDate: Long?
-)
+) : Parcelable
 
 fun convertTitle(title: String?): String {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
