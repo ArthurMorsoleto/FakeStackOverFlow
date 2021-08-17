@@ -27,6 +27,22 @@ data class Question(
     val creationDate: Long?
 ) : Parcelable
 
+data class Answer(
+    @SerializedName("owner")
+    val owner: Owner,
+
+    @SerializedName("is_accepted")
+    val isAccepted: Boolean,
+
+    @SerializedName("creation_date")
+    val creationDate: Long?
+)
+
+data class Owner(
+    @SerializedName("display_name")
+    val displayName: String
+)
+
 fun convertTitle(title: String?): String {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         Html.fromHtml(title, Html.FROM_HTML_MODE_LEGACY).toString()
