@@ -40,7 +40,10 @@ data class Answer(
 
 data class Owner(
     @SerializedName("display_name")
-    val displayName: String
+    val displayName: String,
+
+    @SerializedName("profile_image")
+    val profileImage: String?
 )
 
 fun convertTitle(title: String?): String {

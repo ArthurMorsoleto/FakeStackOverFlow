@@ -13,6 +13,6 @@ interface StackOverFlowApi {
         page: Int
     ): Call<ResponseWrapper<Question>>
 
-    @GET(value = "question/{id}/answers?&order=desc&sort=votes&site=stackoverflow")
+    @GET(value = "questions/{id}/answers?&order=desc&sort=votes&site=stackoverflow")
     fun getAnswers(@Path("id") id: Int): Call<ResponseWrapper<Answer>>
 }
