@@ -10,7 +10,7 @@
         android:id="@+id/ivOwner"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:paddingEnd="8dp"
+        android:paddingHorizontal="8dp"
         android:importantForAccessibility="no"
         android:src="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
