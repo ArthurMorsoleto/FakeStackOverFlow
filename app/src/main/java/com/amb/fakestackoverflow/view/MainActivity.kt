@@ -5,20 +5,22 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.amb.fakestackoverflow.QUESTION_EXTRA
 import com.amb.fakestackoverflow.R
+import com.amb.fakestackoverflow.di.MyApplication
 import com.amb.fakestackoverflow.model.Question
+import com.amb.fakestackoverflow.utils.QUESTION_EXTRA
 import com.amb.fakestackoverflow.viewmodel.QuestionsViewModel
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: QuestionsViewModel by viewModels()
+    @Inject
+    lateinit var viewModel: QuestionsViewModel
 
     private val questionsList by lazy { findViewById<RecyclerView>(R.id.questions_list) }
     private val listErrorText by lazy { findViewById<TextView>(R.id.list_error) }
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var lm: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (applicationContext as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 

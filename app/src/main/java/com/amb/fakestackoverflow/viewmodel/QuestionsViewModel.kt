@@ -5,17 +5,25 @@ import androidx.lifecycle.ViewModel
 import com.amb.fakestackoverflow.model.Answer
 import com.amb.fakestackoverflow.model.Question
 import com.amb.fakestackoverflow.model.ResponseWrapper
-import com.amb.fakestackoverflow.model.StackOverFlowService
+import com.amb.fakestackoverflow.model.repository.StackOverFlowRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class QuestionsViewModel : ViewModel() {
+class QuestionsViewModel @Inject constructor(
+    private val repository: StackOverFlowRepository
+) : ViewModel() {
 
-    val questionsResponse = MutableLiveData<List<Question>>()
-    val answersResponse = MutableLiveData<List<Answer>>()
-    val loading = MutableLiveData<Boolean>()
-    val error = MutableLiveData<String>()
+    private val _questionsResponse = MutableLiveData<List<Question>>()
+    private val _answersResponse = MutableLiveData<List<Answer>>()
+    private val _loading = MutableLiveData<Boolean>()
+    private val _error = MutableLiveData<String>()
+
+    val questionsResponse: MutableLiveData<List<Question>> get() = _questionsResponse
+    val answersResponse: MutableLiveData<List<Answer>> get() = _answersResponse
+    val loading: MutableLiveData<Boolean> get() = _loading
+    val error: MutableLiveData<String> get() = _error
 
     var page = 0
 
@@ -29,36 +37,8 @@ class QuestionsViewModel : ViewModel() {
         getQuestions()
     }
 
-    fun getAnswers(questionId: Int?) {
-        if (questionId != null) {
-            StackOverFlowService.api.getAnswers(questionId)
-                .enqueue(object : Callback<ResponseWrapper<Answer>> {
-                    override fun onResponse(
-                        call: Call<ResponseWrapper<Answer>>,
-                        response: Response<ResponseWrapper<Answer>>
-                    ) {
-                        if (response.isSuccessful) {
-                            val answersList = response.body()
-
-                            answersList?.let {
-                                answersResponse.value = answersList.items
-                                loading.value = false
-                                error.value = null
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ResponseWrapper<Answer>>, t: Throwable) {
-                        onError(t.localizedMessage ?: "Error")
-                    }
-                })
-        } else {
-            onError("Question Id must not be null")
-        }
-    }
-
     private fun getQuestions() {
-        StackOverFlowService.api.getQuestions(page = page)
+        repository.getQuestions(page)
             .enqueue(object : Callback<ResponseWrapper<Question>> {
 
                 override fun onResponse(
@@ -69,9 +49,9 @@ class QuestionsViewModel : ViewModel() {
                         val questionList = response.body()
 
                         questionList?.let {
-                            questionsResponse.value = questionList.items
-                            loading.value = false
-                            error.value = null
+                            _questionsResponse.value = questionList.items
+                            _loading.value = false
+                            _error.value = null
                         }
                     }
                 }
@@ -82,8 +62,32 @@ class QuestionsViewModel : ViewModel() {
             })
     }
 
+    fun getAnswers(questionId: Int) {
+        repository.getAnswers(questionId)
+            .enqueue(object : Callback<ResponseWrapper<Answer>> {
+                override fun onResponse(
+                    call: Call<ResponseWrapper<Answer>>,
+                    response: Response<ResponseWrapper<Answer>>
+                ) {
+                    if (response.isSuccessful) {
+                        val answersList = response.body()
+
+                        answersList?.let {
+                            _answersResponse.value = answersList.items
+                            _loading.value = false
+                            _error.value = null
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseWrapper<Answer>>, t: Throwable) {
+                    onError(t.localizedMessage ?: "Error")
+                }
+            })
+    }
+
     private fun onError(message: String) {
-        error.value = message
-        loading.value = false
+        _error.value = message
+        _loading.value = false
     }
 }

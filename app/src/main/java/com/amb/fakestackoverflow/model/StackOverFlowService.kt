@@ -5,10 +5,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import javax.inject.Inject
 
-
-object StackOverFlowService {
-    private const val STACK_OVERFLOW_API_URL = "https://api.stackexchange.com/2.2/"
+class StackOverFlowService @Inject constructor() {
 
     private fun loggingInterceptor(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor()
@@ -23,4 +22,8 @@ object StackOverFlowService {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create<StackOverFlowApi>()
+
+    companion object {
+        private const val STACK_OVERFLOW_API_URL = "https://api.stackexchange.com/2.2/"
+    }
 }
