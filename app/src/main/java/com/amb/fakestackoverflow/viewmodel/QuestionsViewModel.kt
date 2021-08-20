@@ -4,11 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amb.fakestackoverflow.model.Answer
 import com.amb.fakestackoverflow.model.Question
-import com.amb.fakestackoverflow.model.ResponseWrapper
 import com.amb.fakestackoverflow.model.repository.StackOverFlowRepository
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 class QuestionsViewModel @Inject constructor(
@@ -39,51 +35,28 @@ class QuestionsViewModel @Inject constructor(
 
     private fun getQuestions() {
         repository.getQuestions(page)
-            .enqueue(object : Callback<ResponseWrapper<Question>> {
-
-                override fun onResponse(
-                    call: Call<ResponseWrapper<Question>>,
-                    response: Response<ResponseWrapper<Question>>
-                ) {
-                    if (response.isSuccessful) {
-                        val questionList = response.body()
-
-                        questionList?.let {
-                            _questionsResponse.value = questionList.items
-                            _loading.value = false
-                            _error.value = null
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponseWrapper<Question>>, t: Throwable) {
-                    onError(t.localizedMessage ?: "Error")
-                }
-            })
+            .subscribe({ response ->
+                _questionsResponse.value = response.items
+                _loading.value = false
+                _error.value = null
+            }, {
+                onError(it.localizedMessage ?: "Error")
+            }).also {
+                it.dispose()
+            }
     }
 
     fun getAnswers(questionId: Int) {
         repository.getAnswers(questionId)
-            .enqueue(object : Callback<ResponseWrapper<Answer>> {
-                override fun onResponse(
-                    call: Call<ResponseWrapper<Answer>>,
-                    response: Response<ResponseWrapper<Answer>>
-                ) {
-                    if (response.isSuccessful) {
-                        val answersList = response.body()
-
-                        answersList?.let {
-                            _answersResponse.value = answersList.items
-                            _loading.value = false
-                            _error.value = null
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponseWrapper<Answer>>, t: Throwable) {
-                    onError(t.localizedMessage ?: "Error")
-                }
-            })
+            .subscribe({ response ->
+                _answersResponse.value = response.items
+                _loading.value = false
+                _error.value = null
+            }, {
+                onError(it.localizedMessage ?: "Error")
+            }).also {
+                it.dispose()
+            }
     }
 
     private fun onError(message: String) {
