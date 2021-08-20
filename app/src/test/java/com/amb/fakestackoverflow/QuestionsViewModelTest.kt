@@ -10,11 +10,17 @@ import com.amb.fakestackoverflow.utils.getOrAwaitValue
 import com.amb.fakestackoverflow.viewmodel.QuestionsViewModel
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.Schedulers
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
+import org.junit.runner.Description
+import org.junit.runners.model.Statement
 
 class QuestionsViewModelTest {
 
@@ -36,6 +42,9 @@ class QuestionsViewModelTest {
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val rxSchedulerRule = RxSchedulerRule()
 
     @Before
     fun setup() {
@@ -92,5 +101,27 @@ class QuestionsViewModelTest {
 
         assertEquals(subject.loading.getOrAwaitValue(), false)
         assertEquals(subject.error.getOrAwaitValue(), "Error")
+    }
+}
+
+class RxSchedulerRule : TestRule {
+
+    override fun apply(base: Statement, description: Description) =
+        object : Statement() {
+            override fun evaluate() {
+                RxAndroidPlugins.reset()
+                RxAndroidPlugins.setInitMainThreadSchedulerHandler { SCHEDULER_INSTANCE }
+
+                RxJavaPlugins.reset()
+                RxJavaPlugins.setIoSchedulerHandler { SCHEDULER_INSTANCE }
+                RxJavaPlugins.setNewThreadSchedulerHandler { SCHEDULER_INSTANCE }
+                RxJavaPlugins.setComputationSchedulerHandler { SCHEDULER_INSTANCE }
+
+                base.evaluate()
+            }
+        }
+
+    companion object {
+        private val SCHEDULER_INSTANCE = Schedulers.trampoline()
     }
 }

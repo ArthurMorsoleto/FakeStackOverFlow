@@ -6,7 +6,7 @@ import com.amb.fakestackoverflow.model.ResponseWrapper
 import com.amb.fakestackoverflow.model.StackOverFlowService
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

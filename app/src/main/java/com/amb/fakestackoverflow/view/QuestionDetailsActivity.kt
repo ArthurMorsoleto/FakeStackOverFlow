@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amb.fakestackoverflow.R
 import com.amb.fakestackoverflow.di.MyApplication
 import com.amb.fakestackoverflow.model.Question
-import com.amb.fakestackoverflow.model.convertDate
-import com.amb.fakestackoverflow.model.convertTitle
 import com.amb.fakestackoverflow.utils.QUESTION_EXTRA
+import com.amb.fakestackoverflow.utils.convertDate
+import com.amb.fakestackoverflow.utils.convertTitle
 import com.amb.fakestackoverflow.viewmodel.QuestionsViewModel
 import javax.inject.Inject
 

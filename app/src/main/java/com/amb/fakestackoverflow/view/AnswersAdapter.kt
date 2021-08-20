@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amb.fakestackoverflow.R
 import com.amb.fakestackoverflow.model.Answer
-import com.amb.fakestackoverflow.model.convertDate
+import com.amb.fakestackoverflow.utils.convertDate
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.answers_layout.view.*
 

@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.amb.fakestackoverflow.model.Answer
 import com.amb.fakestackoverflow.model.Question
 import com.amb.fakestackoverflow.model.repository.StackOverFlowRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class QuestionsViewModel @Inject constructor(
@@ -15,6 +18,7 @@ class QuestionsViewModel @Inject constructor(
     private val _answersResponse = MutableLiveData<List<Answer>>()
     private val _loading = MutableLiveData<Boolean>()
     private val _error = MutableLiveData<String>()
+    private val compositeDisposable = CompositeDisposable()
 
     val questionsResponse: MutableLiveData<List<Question>> get() = _questionsResponse
     val answersResponse: MutableLiveData<List<Answer>> get() = _answersResponse
@@ -35,19 +39,23 @@ class QuestionsViewModel @Inject constructor(
 
     private fun getQuestions() {
         repository.getQuestions(page)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
-                _questionsResponse.value = response.items
+                _questionsResponse.postValue(response.items)
                 _loading.value = false
                 _error.value = null
             }, {
                 onError(it.localizedMessage ?: "Error")
             }).also {
-                it.dispose()
+                compositeDisposable.add(it)
             }
     }
 
     fun getAnswers(questionId: Int) {
         repository.getAnswers(questionId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
                 _answersResponse.value = response.items
                 _loading.value = false
@@ -55,12 +63,17 @@ class QuestionsViewModel @Inject constructor(
             }, {
                 onError(it.localizedMessage ?: "Error")
             }).also {
-                it.dispose()
+                compositeDisposable.add(it)
             }
     }
 
     private fun onError(message: String) {
         _error.value = message
         _loading.value = false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

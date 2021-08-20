@@ -4,7 +4,7 @@ import com.amb.fakestackoverflow.model.Answer
 import com.amb.fakestackoverflow.model.Question
 import com.amb.fakestackoverflow.model.ResponseWrapper
 import com.amb.fakestackoverflow.model.StackOverFlowService
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
 import javax.inject.Inject
 
 class StackOverFlowRepository @Inject constructor(
