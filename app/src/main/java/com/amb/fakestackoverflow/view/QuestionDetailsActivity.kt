@@ -2,21 +2,23 @@ package com.amb.fakestackoverflow.view
 
 import android.os.Bundle
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amb.fakestackoverflow.R
+import com.amb.fakestackoverflow.di.MyApplication
 import com.amb.fakestackoverflow.model.Question
 import com.amb.fakestackoverflow.model.convertDate
 import com.amb.fakestackoverflow.model.convertTitle
 import com.amb.fakestackoverflow.utils.QUESTION_EXTRA
 import com.amb.fakestackoverflow.viewmodel.QuestionsViewModel
+import javax.inject.Inject
 
 class QuestionDetailsActivity : AppCompatActivity() {
 
-    private val viewModel: QuestionsViewModel by viewModels()  //TODO fix viewModel injection
+    @Inject
+    lateinit var viewModel: QuestionsViewModel
 
     private val answersList by lazy { findViewById<RecyclerView>(R.id.answers_list) }
     private val questionTitle by lazy { findViewById<TextView>(R.id.tvQuestionTitle) }
@@ -26,6 +28,7 @@ class QuestionDetailsActivity : AppCompatActivity() {
     private lateinit var answersAdapter: AnswersAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (applicationContext as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question_details)
 

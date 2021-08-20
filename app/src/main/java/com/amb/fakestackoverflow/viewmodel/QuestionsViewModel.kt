@@ -22,8 +22,8 @@ class QuestionsViewModel @Inject constructor(
 
     val questionsResponse: MutableLiveData<List<Question>> get() = _questionsResponse
     val answersResponse: MutableLiveData<List<Answer>> get() = _answersResponse
-    val loading = MutableLiveData<Boolean>()
-    val error = MutableLiveData<String>()
+    val loading: MutableLiveData<Boolean> get() = _loading
+    val error: MutableLiveData<String> get() = _error
 
     var page = 0
 

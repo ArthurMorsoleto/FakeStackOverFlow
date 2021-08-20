@@ -31,9 +31,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var lm: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (applicationContext as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
-        (applicationContext as MyApplication).appComponent.inject(this) //TODO fix viewModel injection
-
         setContentView(R.layout.activity_main)
 
         observeViewModel()
