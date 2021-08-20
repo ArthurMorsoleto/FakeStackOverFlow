@@ -58,6 +58,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+    implementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
@@ -66,4 +67,9 @@ dependencies {
 
     implementation 'com.google.dagger:dagger:2.38'
     kapt 'com.google.dagger:dagger-compiler:2.38'
+
+    testImplementation "org.mockito:mockito-core:3.12.1"
+    testImplementation "io.mockk:mockk:1.12.0"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
 }
