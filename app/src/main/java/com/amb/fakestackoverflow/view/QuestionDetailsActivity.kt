@@ -7,16 +7,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.amb.fakestackoverflow.QUESTION_EXTRA
 import com.amb.fakestackoverflow.R
 import com.amb.fakestackoverflow.model.Question
 import com.amb.fakestackoverflow.model.convertDate
 import com.amb.fakestackoverflow.model.convertTitle
+import com.amb.fakestackoverflow.utils.QUESTION_EXTRA
 import com.amb.fakestackoverflow.viewmodel.QuestionsViewModel
 
 class QuestionDetailsActivity : AppCompatActivity() {
 
-    private val viewModel: QuestionsViewModel by viewModels()
+    private val viewModel: QuestionsViewModel by viewModels()  //TODO fix viewModel injection
 
     private val answersList by lazy { findViewById<RecyclerView>(R.id.answers_list) }
     private val questionTitle by lazy { findViewById<TextView>(R.id.tvQuestionTitle) }
@@ -35,7 +35,7 @@ class QuestionDetailsActivity : AppCompatActivity() {
 
         if (question != null) {
             initView(question)
-            viewModel.getAnswers(question.questionId)
+            question.questionId?.let { viewModel.getAnswers(it) }
         }
     }
 
