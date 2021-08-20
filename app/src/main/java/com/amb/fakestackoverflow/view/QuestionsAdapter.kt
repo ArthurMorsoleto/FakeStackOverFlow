@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.amb.fakestackoverflow.R
 import com.amb.fakestackoverflow.model.Question
-import com.amb.fakestackoverflow.model.convertDate
-import com.amb.fakestackoverflow.model.convertTitle
+import com.amb.fakestackoverflow.utils.convertDate
+import com.amb.fakestackoverflow.utils.convertTitle
 import kotlinx.android.synthetic.main.question_layout.view.*
 
 class QuestionsAdapter(

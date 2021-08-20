@@ -1,6 +1,6 @@
 package com.amb.fakestackoverflow.model
 
-import retrofit2.Call
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -11,8 +11,8 @@ interface StackOverFlowApi {
     fun getQuestions(
         @Query("page")
         page: Int
-    ): Call<ResponseWrapper<Question>>
+    ): Single<ResponseWrapper<Question>>
 
     @GET(value = "questions/{id}/answers?&order=desc&sort=votes&site=stackoverflow")
-    fun getAnswers(@Path("id") id: Int): Call<ResponseWrapper<Answer>>
+    fun getAnswers(@Path("id") id: Int): Single<ResponseWrapper<Answer>>
 }
