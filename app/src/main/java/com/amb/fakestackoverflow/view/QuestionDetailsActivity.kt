@@ -1,5 +1,7 @@
 package com.amb.fakestackoverflow.view
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +27,7 @@ class QuestionDetailsActivity : AppCompatActivity() {
     private val questionScore by lazy { findViewById<TextView>(R.id.tvQuestionScore) }
     private val questionCreationDate by lazy { findViewById<TextView>(R.id.tvQuestionCreationDate) }
     private val currentTags by lazy { findViewById<TextView>(R.id.tvCurrentTags) }
+    private val questionLink by lazy { findViewById<TextView>(R.id.tvQuestionLink) }
 
     private lateinit var answersAdapter: AnswersAdapter
 
@@ -54,6 +57,11 @@ class QuestionDetailsActivity : AppCompatActivity() {
         questionScore.text = question.score
         questionCreationDate.text = convertDate(question.creationDate)
         currentTags.text = question.tags.toString()
+        questionLink.setOnClickListener {
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(question.link))
+            startActivity(browserIntent)
+        }
     }
 
     private fun observerViewModel() {

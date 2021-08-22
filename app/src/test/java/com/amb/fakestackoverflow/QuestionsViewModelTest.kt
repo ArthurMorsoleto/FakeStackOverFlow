@@ -32,7 +32,8 @@ class QuestionsViewModelTest {
         questionTitle = "questionTitle",
         creationDate = 1629473330,
         score = "100",
-        tags = arrayListOf()
+        tags = arrayListOf(),
+        link = ""
     )
     private val fakeAnswer = Answer(
         Owner(displayName = "displayName", profileImage = ""),

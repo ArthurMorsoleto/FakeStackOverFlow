@@ -9,13 +9,11 @@
     <TextView
         android:id="@+id/tvQuestionTitle"
         style="@style/Title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:paddingHorizontal="8dp"
-        android:paddingBottom="16dp"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="How to get String Resource within ViewPager Adapter?" />
@@ -45,9 +43,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:paddingHorizontal="8dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvQuestionScore"
         app:layout_constraintTop_toBottomOf="@+id/tvQuestionScore"
         tools:text="android, interface" />
+
+    <TextView
+        android:id="@+id/tvQuestionLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/go_to_question"
+        android:textColor="@color/blue"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="@+id/tvQuestionTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestionTitle"
+        tools:text="@string/go_to_question" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/answers_list"

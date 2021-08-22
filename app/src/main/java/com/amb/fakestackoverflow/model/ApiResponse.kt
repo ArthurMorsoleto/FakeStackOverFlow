@@ -23,7 +23,10 @@ data class Question(
     val creationDate: Long?,
 
     @SerializedName("tags")
-    val tags: ArrayList<String>
+    val tags: ArrayList<String>,
+
+    @SerializedName("link")
+    val link: String
 ) : Parcelable
 
 data class Answer(
