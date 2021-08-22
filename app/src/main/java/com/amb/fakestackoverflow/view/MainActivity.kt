@@ -3,6 +3,7 @@ package com.amb.fakestackoverflow.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.amb.fakestackoverflow.di.MyApplication
 import com.amb.fakestackoverflow.model.Question
 import com.amb.fakestackoverflow.utils.QUESTION_EXTRA
 import com.amb.fakestackoverflow.viewmodel.QuestionsViewModel
+import com.google.android.material.textfield.TextInputLayout
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     private val listErrorText by lazy { findViewById<TextView>(R.id.list_error) }
     private val loadingView by lazy { findViewById<ProgressBar>(R.id.loading_view) }
     private val swipeRefreshLayout by lazy { findViewById<SwipeRefreshLayout>(R.id.swipe_layout) }
+    private val textInputSearch by lazy { findViewById<TextInputLayout>(R.id.textInputSearch) }
+    private val buttonSearch by lazy { findViewById<Button>(R.id.buttonSearch) }
 
     private lateinit var questionsAdapter: QuestionsAdapter
     private lateinit var lm: LinearLayoutManager
@@ -37,12 +41,21 @@ class MainActivity : AppCompatActivity() {
 
         observeViewModel()
         initViews()
-        viewModel.getNextPage()
+        viewModel.getNextPage(textInputSearch.editText?.text.toString())
     }
 
     private fun initViews() {
         setupQuestionList()
         setupRefreshLayout()
+        setupSearchButton()
+    }
+
+    private fun setupSearchButton() {
+        buttonSearch.setOnClickListener {
+            val tag = textInputSearch.editText?.text.toString()
+            viewModel.getFirstPage(tag)
+            questionsAdapter.clearQuestions()
+        }
     }
 
     private fun observeViewModel() {
@@ -73,7 +86,12 @@ class MainActivity : AppCompatActivity() {
     private fun setupRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener {
             questionsAdapter.clearQuestions()
-            viewModel.getFirstPage()
+
+            textInputSearch.editText?.setText("")
+            textInputSearch.clearFocus()
+
+            viewModel.getFirstPage(textInputSearch.editText?.text.toString())
+
             loadingView.visibility = View.VISIBLE
             questionsList.visibility = View.GONE
         }
@@ -101,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                         val lastPosition = lm.findLastVisibleItemPosition()
                         if (childCount - 1 == lastPosition && loadingView.visibility == View.GONE) {
                             loadingView.visibility = View.VISIBLE
-                            viewModel.getNextPage()
+                            viewModel.getNextPage(textInputSearch.editText?.text.toString())
                         }
                     }
                 }

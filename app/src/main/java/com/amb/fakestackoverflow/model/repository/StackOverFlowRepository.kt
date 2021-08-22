@@ -11,8 +11,8 @@ class StackOverFlowRepository @Inject constructor(
     private val stackOverFlowService: StackOverFlowService
 ) {
 
-    fun getQuestions(page: Int): Single<ResponseWrapper<Question>> {
-        return stackOverFlowService.api.getQuestions(page = page)
+    fun getQuestions(page: Int, tag: String? = null): Single<ResponseWrapper<Question>> {
+        return stackOverFlowService.api.getQuestions(page = page, tag = tag)
     }
 
     fun getAnswers(questionId: Int): Single<ResponseWrapper<Answer>> {

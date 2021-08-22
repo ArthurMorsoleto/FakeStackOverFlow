@@ -7,10 +7,12 @@ import retrofit2.http.Query
 
 interface StackOverFlowApi {
 
-    @GET(value = "questions?&order=desc&sort=votes&tagged=android&site=stackoverflow")
+    @GET(value = "questions?&order=desc&sort=votes&site=stackoverflow")
     fun getQuestions(
         @Query("page")
-        page: Int
+        page: Int,
+        @Query("tagged")
+        tag: String?
     ): Single<ResponseWrapper<Question>>
 
     @GET(value = "questions/{id}/answers?&order=desc&sort=votes&site=stackoverflow")
