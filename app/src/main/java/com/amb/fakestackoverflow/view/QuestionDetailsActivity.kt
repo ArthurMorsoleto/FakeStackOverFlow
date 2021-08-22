@@ -24,6 +24,7 @@ class QuestionDetailsActivity : AppCompatActivity() {
     private val questionTitle by lazy { findViewById<TextView>(R.id.tvQuestionTitle) }
     private val questionScore by lazy { findViewById<TextView>(R.id.tvQuestionScore) }
     private val questionCreationDate by lazy { findViewById<TextView>(R.id.tvQuestionCreationDate) }
+    private val currentTags by lazy { findViewById<TextView>(R.id.tvCurrentTags) }
 
     private lateinit var answersAdapter: AnswersAdapter
 
@@ -52,6 +53,7 @@ class QuestionDetailsActivity : AppCompatActivity() {
         questionTitle.text = convertTitle(question.questionTitle)
         questionScore.text = question.score
         questionCreationDate.text = convertDate(question.creationDate)
+        currentTags.text = question.tags.toString()
     }
 
     private fun observerViewModel() {

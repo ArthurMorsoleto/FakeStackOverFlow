@@ -27,18 +27,18 @@ class QuestionsViewModel @Inject constructor(
 
     var page = 0
 
-    fun getNextPage() {
+    fun getNextPage(currentTag: String) {
         page++
-        getQuestions()
+        getQuestions(currentTag)
     }
 
-    fun getFirstPage() {
+    fun getFirstPage(currentTag: String) {
         page = 1
-        getQuestions()
+        getQuestions(currentTag)
     }
 
-    private fun getQuestions() {
-        repository.getQuestions(page)
+    private fun getQuestions(currentTag: String) {
+        repository.getQuestions(page, currentTag)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->

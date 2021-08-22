@@ -26,7 +26,7 @@ class StackOverFlowRepositoryTest {
     @Test
     fun `should call get question from service with success`() {
         every {
-            mockStackOverFlowService.api.getQuestions(any())
+            mockStackOverFlowService.api.getQuestions(any(), any())
         } returns fakeQuestionResponse
 
         val result = subject.getQuestions(1)

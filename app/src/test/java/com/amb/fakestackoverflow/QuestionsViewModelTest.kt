@@ -31,7 +31,8 @@ class QuestionsViewModelTest {
         questionId = 1,
         questionTitle = "questionTitle",
         creationDate = 1629473330,
-        score = "100"
+        score = "100",
+        tags = arrayListOf()
     )
     private val fakeAnswer = Answer(
         Owner(displayName = "displayName", profileImage = ""),
@@ -57,7 +58,7 @@ class QuestionsViewModelTest {
             mockStackOverFlowRepository.getQuestions(any())
         } returns Single.just(ResponseWrapper(items = listOf(fakeQuestion)))
 
-        subject.getNextPage()
+        subject.getNextPage("android")
 
         assertEquals(subject.questionsResponse.getOrAwaitValue(), listOf(fakeQuestion))
         assertEquals(subject.page, 1)
@@ -71,7 +72,7 @@ class QuestionsViewModelTest {
             mockStackOverFlowRepository.getQuestions(any())
         } returns Single.error(Throwable("Error"))
 
-        subject.getFirstPage()
+        subject.getFirstPage("android")
 
         assertEquals(subject.page, 1)
         assertEquals(subject.error.getOrAwaitValue(), "Error")

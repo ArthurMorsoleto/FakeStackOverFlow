@@ -20,7 +20,10 @@ data class Question(
     val score: String?,
 
     @SerializedName("creation_date")
-    val creationDate: Long?
+    val creationDate: Long?,
+
+    @SerializedName("tags")
+    val tags: ArrayList<String>
 ) : Parcelable
 
 data class Answer(
